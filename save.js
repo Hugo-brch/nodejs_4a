@@ -25,7 +25,7 @@ async function main() {
   ];
 
   // Ajouter les commandes
-  const order = [
+  const orders = [
     { id: generateUniqueId(), voitureId: '488 GTB', clientId: clients[0].id, quantity: 2 },
     { id: generateUniqueId(), voitureId: '911', clientId: clients[1].id, quantity: 1 }
   ];
@@ -38,18 +38,18 @@ async function main() {
     await db.createClient(client.id, client.firstName, client.lastName, client.age);
   }
 
-  for (const order of order) {
+  for (const order of orders) {
     await db.createOrder(order.id, order.voitureId, order.clientId, order.quantity);
   }
 
   // Lecture
   const getAllVoitures = await db.getAllVoitures();
   const getAllClients = await db.getAllClients();
-  const getAllOrder = await db.getAllOrder();
+  const getAllOrders = await db.getAllOrders();
 
   console.log('Toutes les voitures :', getAllVoitures);
   console.log('Tous les clients :', getAllClients);
-  console.log('Toutes les commandes :', getAllOrder);
+  console.log('Toutes les commandes :', getAllOrders);
 }
 
 main().catch(err => console.error(err));
