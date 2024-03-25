@@ -30,8 +30,8 @@ const db = require('./voitureModel');
 		{input: { model : "F40", brand : "Ferrari" }, output: "Ferrari"},
 		{input: { model : "Huracan", brand : "Lamborghini" }, output: "Lamborghini"},
 		{input: { model : "Avantador", brand : "Lamborghini" }, output: "Lamborghini"},
-		{input: { model : "911", brand : "Porche" }, output: "Porche"},
-		{input: { model : "GT3 rs", brand : "Porche" }, output: "Porche"},
+		{input: { model : "911", brand : "Porsche" }, output: "Porsche"},
+		{input: { model : "GT3 rs", brand : "Porsche" }, output: "Porsche"},
 		{input: { model : "M4", brand : "BMW" }, output: "BMW"},
 		{input: { model : "X5", brand : "BMW" }, output: "BMW"},
 	]);

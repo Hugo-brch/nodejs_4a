@@ -8,14 +8,14 @@ function getRandomInt(max) {
 
 async function main() {
   const voitures = {
-    '488 GTB': { qty: 3, price: 3000},
-    'F40': { qty: 2, price: 10000},
-    'Huracan': { qty: 4, price: 3000},
-    'Avantador': { qty: 3, price: 3000},
-    '911': { qty: 5, price: 1500},
-    'GT3 rs': { qty: 4, price: 2000},
-    'M4': { qty: 6, price: 800},
-    'X5': { qty: 6, price: 800},
+    '488 GTB': { qty: 3, price: 3000, brand: "Ferrari" },
+    'F40': { qty: 2, price: 10000, brand: "Ferrari" },
+    'Huracan': { qty: 4, price: 3000, brand: "Lamborghini" },
+    'Avantador': { qty: 3, price: 3000, brand: "Lamborghini" },
+    '911': { qty: 5, price: 1500, brand: "Porsche" },
+    'GT3 rs': { qty: 4, price: 2000, brand: "Porsche" },
+    'M4': { qty: 6, price: 800, brand: "BMW" },
+    'X5': { qty: 6, price: 800, brand: "BMW" },
   }
 
   for (voiture_name in voitures) {
@@ -24,7 +24,7 @@ async function main() {
 
   // Read
   const getAllVoitures = await db.getAllVoitures();
-  console.log('Tous les voitures :', getAllVoitures);
+  console.log('Toutes les voitures :', getAllVoitures);
 }
 
 main().catch(err => console.error(err));
