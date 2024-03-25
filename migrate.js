@@ -2,6 +2,18 @@ const knex = require('knex')(require('./knexfile')['development']);
 
 async function createTables() {
   try {
+        // Vérifier si la table "brands" existe
+        const brandTableExists = await knex.schema.hasTable('brands');
+        if (!brandTableExists) {
+          await knex.schema.createTable('brands', table => {
+            table.increments('id').primary();
+            table.string('name');
+          });
+          console.log('La table "brands" a été créée avec succès.');
+        } else {
+          console.log('La table "brands" existe déjà.');
+        }
+
     // Vérifier si la table "voitures" existe
     const voituresTableExists = await knex.schema.hasTable('voitures');
     if (!voituresTableExists) {
@@ -10,6 +22,7 @@ async function createTables() {
         table.string('name');
         table.integer('price');
         table.integer('quantity');
+        table.integer('brand_id');
       });
       console.log('La table "voitures" a été créée avec succès.');
     } else {
@@ -20,7 +33,7 @@ async function createTables() {
     const clientsTableExists = await knex.schema.hasTable('clients');
     if (!clientsTableExists) {
       await knex.schema.createTable('clients', table => {
-        table.string('id').primary();
+        table.increments('id').primary();
         table.string('firstName');
         table.string('lastName');
         table.integer('age');
@@ -34,9 +47,9 @@ async function createTables() {
     const OrdersTableExists = await knex.schema.hasTable('orders');
     if (!OrdersTableExists) {
       await knex.schema.createTable('orders', table => {
-        table.string('id').primary();
-        table.string('voitureId').references('id').inTable('voitures');
-        table.string('clientId').references('id').inTable('clients');
+        table.increments('id').primary();
+        table.integer('voitureId').references('id').inTable('voitures');
+        table.integer('clientId').references('id').inTable('clients');
         table.integer('quantity');
       });
       console.log('La table "orders" a été créée avec succès.');

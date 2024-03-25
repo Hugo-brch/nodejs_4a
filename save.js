@@ -1,5 +1,8 @@
 // App.js - Utilisation des opérations CRUD avec Knex
-const db = require('./Models/voitureModel');
+const dbVoiture = require('./Models/voitureModel');
+const dbBrand = require('./Models/brandModel');
+const dbClient = require('./Models/clientModel');
+const dbOrder = require('./Models/orderModel');
 
 // Fonction pour générer un ID unique
 function generateUniqueId() {
@@ -7,45 +10,60 @@ function generateUniqueId() {
 }
 
 async function main() {
-    const voitures = {
-        '488 GTB': { qty: 3, price: 3000, brand: "Ferrari" },
-        'Ferrari': { qty: 2, price: 10000, brand: "Ferrari" },
-        'Huracan': { qty: 4, price: 3000, brand: "Lamborghini" },
-        'Avantador': { qty: 3, price: 3000, brand: "Lamborghini" },
-        '911': { qty: 5, price: 1500, brand: "Porsche" },
-        'GT3 rs': { qty: 4, price: 2000, brand: "Porsche" },
-        'M4': { qty: 6, price: 800, brand: "BMW" },
-        'X5': { qty: 6, price: 800, brand: "BMW" },
-    };
+    const brands = [
+      { 'name': 'Ferrari', 'voitures' :  {
+          '488 GTB': { qty: 3, price: 3000},
+          'Ferrari': { qty: 2, price: 10000 },
+          'Huracan': { qty: 4, price: 3000 },
+          'Avantador': { qty: 3, price: 3000 },
+          '911': { qty: 5, price: 1500 },
+          'GT3 rs': { qty: 4, price: 2000 },
+          'M4': { qty: 6, price: 800 },
+          'X5': { qty: 6, price: 800 },
+      }
+    }
+    ]
 
   // Ajouter des clients
   const clients = [
-    { id: generateUniqueId(), firstName: 'John', lastName: 'Doe', age: 30 },
-    { id: generateUniqueId(), firstName: 'Jane', lastName: 'Smith', age: 25 }
+    { firstName: 'John', lastName: 'Doe', age: 30 },
+    { firstName: 'Jane', lastName: 'Smith', age: 25 }
   ];
 
   // Ajouter les commandes
   const orders = [
-    { id: generateUniqueId(), voitureId: '488 GTB', clientId: clients[0].id, quantity: 2 },
-    { id: generateUniqueId(), voitureId: '911', clientId: clients[1].id, quantity: 1 }
+    { voitureId: '488 GTB', clientId: clients[0].id, quantity: 2 },
+    { voitureId: '911', clientId: clients[1].id, quantity: 1 }
   ];
 
-  for (const voitureName in voitures) {
-    await db.createVoiture(voitureName, voitures[voitureName].qty, voitures[voitureName].price);
+  const voitures_ids = []
+  for(brand of brands) {
+    const brand_record = await dbBrand.createBrand(brand.name);
+    voitures = brand['voitures'];
+    for (const voitureName in voitures) {
+      const voiture = await dbVoiture.createVoiture(voitureName, voitures[voitureName].qty, voitures[voitureName].price, brand_record[0]);
+      voitures_ids.push(voiture[0])
+    }
   }
 
+
+  const clients_ids = []
   for (const client of clients) {
-    await db.createClient(client.id, client.firstName, client.lastName, client.age);
+    client_record = await dbClient.createClient(client.firstName, client.lastName, client.age);
+    clients_ids.push(client_record[0])
   }
 
+  console.info(clients_ids, voitures_ids)
   for (const order of orders) {
-    await db.createOrder(order.id, order.voitureId, order.clientId, order.quantity);
+    await dbOrder.createOrder(voitures_ids[0], clients_ids[0], order.quantity);
   }
 
   // Lecture
-  const getAllVoitures = await db.getAllVoitures();
-  const getAllClients = await db.getAllClients();
-  const getAllOrders = await db.getAllOrders();
+  const getAllBrands = await dbBrand.getAllBrands();
+  const getAllVoitures = await dbVoiture.getAllVoitures();
+  const getAllClients = await dbClient.getAllClients();
+  const getAllOrders = await dbOrder.getAllOrders();
+  
 
   console.log('Toutes les voitures :', getAllVoitures);
   console.log('Tous les clients :', getAllClients);

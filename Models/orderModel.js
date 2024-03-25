@@ -1,8 +1,8 @@
 const knex = require('knex')(require('../knexfile')['development']);
 
 // Create
-async function createOrder(id, voitureId, clientId, quantity) {
-  return await knex('orders').insert({ id, voitureId, clientId, quantity });
+async function createOrder(voitureId, clientId, quantity) {
+  return await knex('orders').insert({ voitureId, clientId, quantity });
 }
 
 // Read

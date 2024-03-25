@@ -3,8 +3,8 @@
 const knex = require('knex')(require('../knexfile')['development']);
 
 // Create
-async function createClient(id, firstName, lastName, age) {
-  return await knex('clients').insert({ id, firstName, lastName, age });
+async function createClient(firstName, lastName, age) {
+  return await knex('clients').insert({ firstName, lastName, age });
 }
 
 // Read
