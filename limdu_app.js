@@ -1,6 +1,6 @@
 var limdu = require('limdu');
 const prompt = require("prompt-sync")({ sigint: true });
-const db = require('./voitureModel');
+const db = require('./Models/voitureModel');
 
 (async function() {
 
