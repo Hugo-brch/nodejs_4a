@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
 // App.js - Utilisation des opérations CRUD avec Knex
-
 const db = require('./Models/voitureModel');
-=======
-const db = require('./voitureModel');
->>>>>>> Stashed changes
 
 // Fonction pour générer un ID unique
 function generateUniqueId() {
