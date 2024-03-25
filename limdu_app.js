@@ -28,8 +28,8 @@ const db = require('./voitureModel');
 	intentClassifier.trainBatch([
 		{input: { model : "488 GTB", brand : "Ferrari" }, output: "Ferrari"},
 		{input: { model : "F40", brand : "Ferrari" }, output: "Ferrari"},
-		{input: { model : "Huracan", brand : "Lamborgini" }, output: "Lamborgini"},
-		{input: { model : "Avantador", brand : "Lamborgini" }, output: "Lamborgini"},
+		{input: { model : "Huracan", brand : "Lamborghini" }, output: "Lamborghini"},
+		{input: { model : "Avantador", brand : "Lamborghini" }, output: "Lamborghini"},
 		{input: { model : "911", brand : "Porche" }, output: "Porche"},
 		{input: { model : "GT3 rs", brand : "Porche" }, output: "Porche"},
 		{input: { model : "M4", brand : "BMW" }, output: "BMW"},
