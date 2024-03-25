@@ -14,14 +14,24 @@ async function main() {
       { 'name': 'Ferrari', 'voitures' :  {
           '488 GTB': { qty: 3, price: 3000},
           'Ferrari': { qty: 2, price: 10000 },
+        },
+        'name': 'Lamborgini', 'voitures' : {
           'Huracan': { qty: 4, price: 3000 },
           'Avantador': { qty: 3, price: 3000 },
+        },
+        'name': 'Porche', 'voitures' : {
           '911': { qty: 5, price: 1500 },
           'GT3 rs': { qty: 4, price: 2000 },
+        },
+        'name': 'BMW', 'voitures' : {
           'M4': { qty: 6, price: 800 },
-          'X5': { qty: 6, price: 800 },
+          'X5': { qty: 9, price: 1000 },
+        },
+        'name': 'Audi', 'voitures' : {
+          'RS4': { qty: 5, price: 800 },
+          'Q5': { qty: 3, price: 1500 },
+        }
       }
-    }
     ]
 
   // Ajouter des clients
@@ -65,6 +75,7 @@ async function main() {
   const getAllOrders = await dbOrder.getAllOrders();
   
 
+  console.log('Toutes les brands :', getAllBrands);
   console.log('Toutes les voitures :', getAllVoitures);
   console.log('Tous les clients :', getAllClients);
   console.log('Toutes les commandes :', getAllOrders);
