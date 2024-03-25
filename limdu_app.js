@@ -1,11 +1,11 @@
 var limdu = require('limdu');
 const prompt = require("prompt-sync")({ sigint: true });
-const db = require('./boissonModel');
+const db = require('./voitureModel');
 
 (async function() {
 
-	const boissons = await db.getAllBoissons()
-	console.log(boissons)
+	const voitures = await db.getAllVoitures()
+	console.log(voitures)
 	// First, define our base classifier type (a multi-label classifier based on winnow):
 	var TextClassifier = limdu.classifiers.multilabel.BinaryRelevance.bind(0, {
 		binaryClassifierType: limdu.classifiers.Winnow.bind(0, {retrain_count: 10})
@@ -45,7 +45,7 @@ const db = require('./boissonModel');
 
 	// Train and test:
 	intentClassifierAccept.trainBatch([
-		{input: "Je veux bien cette boisson", output: "oui"},
+		{input: "Je veux bien cette voiture", output: "oui"},
 		{input: "Donne moi !", output: "oui"},
 		{input: "je prends", output: "oui"},
 		{input: "ok", output: "oui"},
@@ -61,17 +61,17 @@ const db = require('./boissonModel');
 	const rhum_want = prompt("Pouvez-vous me dire le rhum que vous souhaitez (Nick, Barcardi, Morgan) possible ?");
 	predicted_response = intentClassifier.classify(rhum_want);
 
-	let current_boisson = null
+	let current_voiture = null
 	// console.log('predicted_response', predicted_response)
-	for (boison of boissons) {
+	for (boison of voitures) {
 		if (boison.name == predicted_response[0]) {
-			console.log("La boison", boison['name'], "est de", boison['price'], " EUR")
-			current_boisson = boison 
+			console.log("La voiture", voiture['name'], "est de", voiture['price'], " EUR")
+			current_voiture = voiture 
 			break
 		}
 	}
 
-	const yesno = prompt(`Souhaitez-vous payer votre ${current_boisson.name} ?`);
+	const yesno = prompt(`Souhaitez-vous payer votre ${current_voiture.name} ?`);
 	predicted_response = intentClassifierAccept.classify(yesno);
 	if (predicted_response[0] == 'non') {
 		console.log('Merci et à la prochaine!')
@@ -79,19 +79,19 @@ const db = require('./boissonModel');
 
 	if (predicted_response[0] == 'oui') {
 
-		const want_qty = prompt(`Avez-vous besoin de combien de ${current_boisson.name} ?`);
-		console.log(`Vous voulez ${Number(want_qty)} ${current_boisson.name}(s)`)
-		boisson_from_db = await db.getBoisonById(current_boisson.id)
-		if ((boisson_from_db.quantity <= 0)) {
-			console.log(`Nous n'avons plus de ${boisson_from_db.name}!`)
-		} else if ((boisson_from_db.quantity - Number(want_qty)) <= 0) {
-			console.log(`Nous n'avons pas suffisamment de ${boisson_from_db.name} pour vous servir!`)
+		const want_qty = prompt(`Avez-vous besoin de combien de ${current_voiture.name} ?`);
+		console.log(`Vous voulez ${Number(want_qty)} ${current_voiture.name}(s)`)
+		voiture_from_db = await db.getBoisonById(current_voiture.id)
+		if ((voiture_from_db.quantity <= 0)) {
+			console.log(`Nous n'avons plus de ${voiture_from_db.name}!`)
+		} else if ((voiture_from_db.quantity - Number(want_qty)) <= 0) {
+			console.log(`Nous n'avons pas suffisamment de ${voiture_from_db.name} pour vous servir!`)
 		} else {
-			db.updateBoisson(current_boisson.id, boisson_from_db.quantity - Number(want_qty))
+			db.updateVoiture(current_voiture.id, voiture_from_db.quantity - Number(want_qty))
 			if (Number(want_qty) == 1) {
-				console.log('Ok merci prennez votre boisson!')
+				console.log('Ok merci prennez votre voiture!')
 			} else {
-				console.log('Ok merci prennez vos boissons!')
+				console.log('Ok merci prennez vos voitures!')
 			}
 		}
 	}
