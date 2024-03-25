@@ -29,8 +29,22 @@ const db = require('./Models/voitureModel');
 
     console.log('Bonjour');
 
+<<<<<<< Updated upstream
     const voitureName = prompt("Quelle voiture souhaitez-vous ? ");
     const predictedBrand = brandClassifier.classify(voitureName)[0];
+=======
+	// Entraîner et tester :
+	intentClassifier.trainBatch([
+		{input: "488 GTB", output: "Ferrari"},
+		{input: "F40 Ferrari", output: "Ferrari"},
+		{input: "Huracan Lamborghini", output: "Lamborghini"},
+		{input: "Avantador Lamborghini", output: "Lamborghini"},
+		{input: "911 Porsche", output: "Porsche"},
+		{input: "GT3 rs Porsche", output: "Porsche"},
+		{input: "M4 BMW", output: "BMW"},
+		{input: "X5 BMW", output: "BMW"},
+	]);
+>>>>>>> Stashed changes
 
     let currentVoiture = null;
     for (const voiture of voitures) {
