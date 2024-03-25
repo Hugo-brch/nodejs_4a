@@ -61,6 +61,6 @@ const db = require('./Models/voitureModel');
             console.log('Merci et à bientôt !');
         }
     } else {
-        console.log(`Désolé, nous ne disposons pas de ${predictedBrand} dans notre stock.`);
+        console.log(`Désolé, nous ne disposons pas de ${voitureName} dans notre stock.`);
     }
 })();
