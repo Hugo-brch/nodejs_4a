@@ -26,14 +26,14 @@ const db = require('./boissonModel');
 
 	// Train and test:
 	intentClassifier.trainBatch([
-		{input: "Je veux boire un barcadi", output: "barcadi"},
-		{input: "Je veux boire un barcad", output: "barcadi"},
-		{input: "Je veux une boisson de barcadir", output: "barcadi"},
-		{input: "J'aime du barcardi", output: "barcadi"},
-		{input: "Je veux boire un captain morgan", output: "captain_morgan"},
-		{input: "J'aime du captain morgan", output: "captain_morgan"},
-		{input: "Je veux boire un old nick", output: "old_nick"},
-		{input: "J'aime du old nick", output: "old_nick"},
+		{input: { model : "488 GTB", brand : "Ferrari" }, output: "Ferrari"},
+		{input: { model : "F40", brand : "Ferrari" }, output: "Ferrari"},
+		{input: { model : "Huracan", brand : "Lamborgini" }, output: "Lamborgini"},
+		{input: { model : "Avantador", brand : "Lamborgini" }, output: "Lamborgini"},
+		{input: { model : "911", brand : "Porche" }, output: "Porche"},
+		{input: { model : "Cayman", brand : "Porche" }, output: "Porche"},
+		{input: { model : "M4", brand : "BMW" }, output: "BMW"},
+		{input: { model : "X5", brand : "BMW" }, output: "BMW"},
 	]);
 
 
