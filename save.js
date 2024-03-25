@@ -1,6 +1,6 @@
 // App.js - Utilisation des opérations CRUD avec Knex
 
-const db = require('./voitureModel');
+const db = require('./Models/voitureModel');
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -9,7 +9,7 @@ function getRandomInt(max) {
 async function main() {
   const voitures = {
     '488 GTB': { qty: 3, price: 3000, brand: "Ferrari" },
-    'F40': { qty: 2, price: 10000, brand: "Ferrari" },
+    'Ferrari': { qty: 2, price: 10000, brand: "Ferrari" },
     'Huracan': { qty: 4, price: 3000, brand: "Lamborghini" },
     'Avantador': { qty: 3, price: 3000, brand: "Lamborghini" },
     '911': { qty: 5, price: 1500, brand: "Porsche" },
