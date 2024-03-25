@@ -31,7 +31,7 @@ const db = require('./boissonModel');
 		{input: { model : "Huracan", brand : "Lamborgini" }, output: "Lamborgini"},
 		{input: { model : "Avantador", brand : "Lamborgini" }, output: "Lamborgini"},
 		{input: { model : "911", brand : "Porche" }, output: "Porche"},
-		{input: { model : "Cayman", brand : "Porche" }, output: "Porche"},
+		{input: { model : "GT3 rs", brand : "Porche" }, output: "Porche"},
 		{input: { model : "M4", brand : "BMW" }, output: "BMW"},
 		{input: { model : "X5", brand : "BMW" }, output: "BMW"},
 	]);
