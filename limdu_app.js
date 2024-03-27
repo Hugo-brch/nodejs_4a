@@ -15,7 +15,7 @@ const dbOrder = require('./Models/orderModel');
     const trainingDataBrands = [
         { input: "Ferrari", output: "Ferrari" },
         { input: "Lamborghini", output: "Lamborghini" },
-        { input: "Porsche", output: "Porsche" },
+        { input: "Porsche", output: "Porsche" }, 
         { input: "BMW", output: "BMW" },
         { input: "Audi", output: "Audi" },
         { input: "Je veux une ferrari", output: "Ferrari" },
