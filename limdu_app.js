@@ -78,6 +78,12 @@ const dbOrder = require('./Models/orderModel');
         const lastName = prompt("Entrez votre nom : ");
         const age = prompt("Entrez votre âge : ");
 
+        // Vérifier si l'utilisateur a l'âge requis pour acheter une voiture
+        if (age < 18) {
+        console.log("Désolé, vous devez avoir au moins 18 ans pour acheter une voiture.");
+        return;
+        }
+        
         // Ajouter le client à la base de données
         const clientId = await dbClient.createClient(firstName, lastName, age);
 
