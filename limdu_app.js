@@ -6,6 +6,11 @@ const dbClient = require('./Models/clientModel');
 const dbOrder = require('./Models/orderModel');
 
 (async function() {
+    // Afficher la base de données de voitures avant que le bot ne dise bonjour
+    const allVoitures = await dbVoiture.getAllVoitures();
+    console.log('Voici les voitures disponibles :');
+    console.log(allVoitures);
+
     // Entraîner le classificateur pour reconnaître les marques de voitures
     const trainingDataBrands = [
         { input: "Ferrari", output: "Ferrari" },
@@ -13,7 +18,7 @@ const dbOrder = require('./Models/orderModel');
         { input: "Porsche", output: "Porsche" },
         { input: "BMW", output: "BMW" },
         { input: "Audi", output: "Audi" },
-        // Ajoutez ici d'autres marques avec leurs noms
+        { input: "Je veux une ferrari", output: "Ferrari" },
     ];
 
     var brandClassifier = new limdu.classifiers.EnhancedClassifier({

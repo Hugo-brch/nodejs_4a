@@ -27,8 +27,9 @@ async function getVoitureById(id) {
 
 // Update
 async function updateVoiture(id, updates) {
-  return await knex('voitures').where({ id }).update(updates);
+  return await knex('voitures').where({ id }).update({ quantity: updates });
 }
+
 
 // Delete
 async function deleteVoiture(id) {
