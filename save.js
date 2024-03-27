@@ -15,7 +15,7 @@ async function main() {
       name: 'Ferrari',
       voitures: {
         '488 GTB': { qty: 3, price: 3000 },
-        'Ferrari': { qty: 2, price: 10000 }
+        'F40': { qty: 2, price: 10000 }
       }
     },
     {
@@ -29,7 +29,7 @@ async function main() {
       name: 'Porsche',
       voitures: {
         '911': { qty: 5, price: 1500 },
-        'GT3 rs': { qty: 4, price: 2000 }
+        'GT3 RS': { qty: 4, price: 2000 }
       }
     },
     {
