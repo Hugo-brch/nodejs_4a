@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "knex": "^3.1.0",
+    "limdu": "^1.0.0",
+    "nodemon": "^3.1.0",
+    "prompt-sync": "^4.2.0",
+    "sqlite3": "^5.1.7"
+  }
+}

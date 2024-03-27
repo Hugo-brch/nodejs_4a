@@ -1,99 +1,100 @@
-var limdu = require('limdu');
+const limdu = require('limdu');
 const prompt = require("prompt-sync")({ sigint: true });
-const db = require('./boissonModel');
+const dbVoiture = require('./Models/voitureModel');
+const dbBrand = require('./Models/brandModel');
+const dbClient = require('./Models/clientModel');
+const dbOrder = require('./Models/orderModel');
 
 (async function() {
+    // Afficher la base de données de voitures avant que le bot ne dise bonjour
+    const allVoitures = await dbVoiture.getAllVoitures();
+    console.log('Voici les voitures disponibles :');
+    console.log(allVoitures);
 
-	const boissons = await db.getAllBoissons()
-	console.log(boissons)
-	// First, define our base classifier type (a multi-label classifier based on winnow):
-	var TextClassifier = limdu.classifiers.multilabel.BinaryRelevance.bind(0, {
-		binaryClassifierType: limdu.classifiers.Winnow.bind(0, {retrain_count: 10})
-	});
+    // Entraîner le classificateur pour reconnaître les marques de voitures
+    const trainingDataBrands = [
+        { input: "Ferrari", output: "Ferrari" },
+        { input: "Lamborghini", output: "Lamborghini" },
+        { input: "Porsche", output: "Porsche" },
+        { input: "BMW", output: "BMW" },
+        { input: "Audi", output: "Audi" },
+        { input: "Je veux une ferrari", output: "Ferrari" },
+    ];
 
-	// Now define our feature extractor - a function that takes a sample and adds features to a given features set:
-	var WordExtractor = function(input, features) {
-		input.split(" ").forEach(function(word) {
-			features[word]=1;
-		});
-	};
+    var brandClassifier = new limdu.classifiers.EnhancedClassifier({
+        classifierType: limdu.classifiers.multilabel.BinaryRelevance.bind(0, {
+            binaryClassifierType: limdu.classifiers.Winnow.bind(0, { retrain_count: 10 })
+        }),
+        featureExtractor: function(input, features) {
+            input.split(" ").forEach(function(word) {
+                features[word] = 1;
+            });
+        }
+    });
+    brandClassifier.trainBatch(trainingDataBrands);
 
-	// Initialize a classifier with the base classifier type and the feature extractor:
-	var intentClassifier = new limdu.classifiers.EnhancedClassifier({
-		classifierType: TextClassifier,
-		featureExtractor: WordExtractor
-	});
+    // Demander la marque de la voiture
+    const marque = prompt("Quelle marque de voiture recherchez-vous ? ");
 
-	// Train and test:
-	intentClassifier.trainBatch([
-		{input: "Je veux boire un barcadi", output: "barcadi"},
-		{input: "Je veux boire un barcad", output: "barcadi"},
-		{input: "Je veux une boisson de barcadir", output: "barcadi"},
-		{input: "J'aime du barcardi", output: "barcadi"},
-		{input: "Je veux boire un captain morgan", output: "captain_morgan"},
-		{input: "J'aime du captain morgan", output: "captain_morgan"},
-		{input: "Je veux boire un old nick", output: "old_nick"},
-		{input: "J'aime du old nick", output: "old_nick"},
-	]);
+    // Afficher les modèles de voitures disponibles pour la marque choisie
+    const voitures = await dbVoiture.getVoituresByBrand(marque);
+    console.log(`Voici les modèles de voitures disponibles pour la marque ${marque}:`);
+    console.log(voitures)
+    voitures.forEach(voiture => console.log(voiture.name));
 
+    // Demander le modèle de voiture
+    const modele = prompt("Quel modèle de voiture souhaitez-vous ? ");
 
-	// Initialize a classifier with the base classifier type and the feature extractor:
-	var intentClassifierAccept = new limdu.classifiers.EnhancedClassifier({
-		classifierType: TextClassifier,
-		featureExtractor: WordExtractor
-	});
+    // Classer la marque de voiture sélectionnée
+    const predictedBrand = brandClassifier.classify(modele);
 
-	// Train and test:
-	intentClassifierAccept.trainBatch([
-		{input: "Je veux bien cette boisson", output: "oui"},
-		{input: "Donne moi !", output: "oui"},
-		{input: "je prends", output: "oui"},
-		{input: "ok", output: "oui"},
-		{input: "je ne prends pas", output: "no"},
-		{input: "Non c'est trop chère", output: "non"},
-		{input: "Non je veux pas", output: "non"},
-		{input: "Non sait pas !", output: "non"},
-	]);
+    // Trouver les détails de la voiture sélectionnée
+    const selectedVoiture = voitures.find(voiture => voiture.name === modele);
 
+    if (!selectedVoiture) {
+        console.log(`Désolé, le modèle ${modele} n'est pas disponible.`);
+        return;
+    }
 
+    console.log(`Voici les détails de la voiture sélectionnée :`);
+    console.log(`Nom: ${selectedVoiture.name}`);
+    console.log(`Prix: ${selectedVoiture.price} EUR`);
+    console.log(`Quantité en stock: ${selectedVoiture.quantity}`);
 
-	console.log('Bonjour')
-	const rhum_want = prompt("Pouvez-vous me dire le rhum que vous souhaitez (Nick, Barcardi, Morgan) possible ?");
-	predicted_response = intentClassifier.classify(rhum_want);
+    // Demander à l'utilisateur s'il souhaite acheter la voiture
+    const response = prompt(`Voulez-vous acheter la ${selectedVoiture.name} ? (oui/non) `);
 
-	let current_boisson = null
-	// console.log('predicted_response', predicted_response)
-	for (boison of boissons) {
-		if (boison.name == predicted_response[0]) {
-			console.log("La boison", boison['name'], "est de", boison['price'], " EUR")
-			current_boisson = boison 
-			break
-		}
-	}
+    if (response.toLowerCase() === 'oui') {
+        const quantity = prompt(`Combien de ${selectedVoiture.name} souhaitez-vous acheter ? `);
 
-	const yesno = prompt(`Souhaitez-vous payer votre ${current_boisson.name} ?`);
-	predicted_response = intentClassifierAccept.classify(yesno);
-	if (predicted_response[0] == 'non') {
-		console.log('Merci et à la prochaine!')
-	}
+        // Vérifier si la quantité demandée est disponible en stock
+        if (quantity > selectedVoiture.quantity) {
+            console.log(`Désolé, nous n'avons pas assez de ${selectedVoiture.name} en stock.`);
+            return;
+        }
 
-	if (predicted_response[0] == 'oui') {
+        // Demander les informations du client
+        const firstName = prompt("Entrez votre prénom : ");
+        const lastName = prompt("Entrez votre nom : ");
+        const age = prompt("Entrez votre âge : ");
 
-		const want_qty = prompt(`Avez-vous besoin de combien de ${current_boisson.name} ?`);
-		console.log(`Vous voulez ${Number(want_qty)} ${current_boisson.name}(s)`)
-		boisson_from_db = await db.getBoisonById(current_boisson.id)
-		if ((boisson_from_db.quantity <= 0)) {
-			console.log(`Nous n'avons plus de ${boisson_from_db.name}!`)
-		} else if ((boisson_from_db.quantity - Number(want_qty)) <= 0) {
-			console.log(`Nous n'avons pas suffisamment de ${boisson_from_db.name} pour vous servir!`)
-		} else {
-			db.updateBoisson(current_boisson.id, boisson_from_db.quantity - Number(want_qty))
-			if (Number(want_qty) == 1) {
-				console.log('Ok merci prennez votre boisson!')
-			} else {
-				console.log('Ok merci prennez vos boissons!')
-			}
-		}
-	}
+        // Vérifier si l'utilisateur a l'âge requis pour acheter une voiture
+        if (age < 18) {
+        console.log("Désolé, vous devez avoir au moins 18 ans pour acheter une voiture.");
+        return;
+        }
+        
+        // Ajouter le client à la base de données
+        const clientId = await dbClient.createClient(firstName, lastName, age);
 
-})()
+        // Ajouter la commande à la base de données
+        await dbOrder.createOrder(selectedVoiture.id, clientId, quantity);
+
+        // Mettre à jour la quantité de la voiture en stock
+        await dbVoiture.updateVoiture(selectedVoiture.id, selectedVoiture.quantity - quantity);
+
+        console.log(`Merci pour votre achat de ${quantity} ${selectedVoiture.name}(s) !`);
+    } else {
+        console.log('Merci et à bientôt !');
+    }
+})();
