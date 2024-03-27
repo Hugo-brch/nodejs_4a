@@ -72,33 +72,18 @@ const dbOrder = require('./Models/orderModel');
             console.log(`Désolé, nous n'avons pas assez de ${selectedVoiture.name} en stock.`);
             return;
         }
-        function validateName(name) {
-            return /^[a-zA-Z]+$/.test(name);
-        }
-        
-        // Demander les informations du client (prénom)
-        let firstName;
-        do {
-            firstName = prompt("Entrez votre prénom : ");
-            if (!validateName(firstName)) {
-            console.log("Le prénom ne peut contenir que des lettres. Veuillez réessayer.");
-            }
-        } while (!validateName(firstName));
 
-        // Demander les informations du client (nom)
-        let lastName;
-        do {
-            lastName = prompt("Entrez votre nom : ");
-            if (!validateName(lastName)) {
-            console.log("Le nom ne peut contenir que des lettres. Veuillez réessayer.");
-            }
-        } while (!validateName(lastName));
+        // Demander les informations du client
+        const firstName = prompt("Entrez votre prénom : ");
+        const lastName = prompt("Entrez votre nom : ");
+        const age = prompt("Entrez votre âge : ");
+
         // Vérifier si l'utilisateur a l'âge requis pour acheter une voiture
         if (age < 18) {
         console.log("Désolé, vous devez avoir au moins 18 ans pour acheter une voiture.");
         return;
         }
-
+        
         // Ajouter le client à la base de données
         const clientId = await dbClient.createClient(firstName, lastName, age);
 
